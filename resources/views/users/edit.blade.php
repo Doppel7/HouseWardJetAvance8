@@ -36,7 +36,7 @@
                                             <div class="form-group">
                                             <label for="tipodoc_id"></label>
                                             <select wire:model="rol_id"   name="rol_id" value="{{$user->rol_id}}" id="rol_id" class="form-control">
-                                            <option value="">>-- Escoja el rol --<</option>
+                                            <option value="">>-- Escoja el rol * --<</option>
                                             @foreach($roles as $role)
 
                                             <option @if ($role->id==$user->rol_id)
@@ -54,7 +54,7 @@
                                             <div class="form-group">
                                             <label for="tipodoc_id"></label>
                                             <select wire:model="tipodoc_id" name="tipodoc_id"  id="tipodoc_id" class="form-control">
-                                            <option  value="{{$user->tipodoc_id}}">>-- Escoja el tipo de documento --<</option>
+                                            <option  value="{{$user->tipodoc_id}}">>-- Escoja el tipo de documento * --<</option>
                                             @foreach($tipodocumentos as $tipodocumento)
                                             <option @if ($tipodocumento->id==$user->tipodoc_id)
                                                 selected="true"
@@ -71,7 +71,8 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="documento"></label>
-                                                    <input type="text" class="form-control" name="documento" placeholder="Documento" value="{{$user->documento}}" autofocus>
+                                                    <input type="text" class="form-control @error('documento') is-invalid @enderror" name="documento" placeholder="Documento *" value="{{old('documento', $user->documento)}}" autofocus>
+                                                    @error('documento') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -81,7 +82,9 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="name"></label>
-                                                    <input type="text" class="form-control" name="name" placeholder="Nombre"value="{{$user->name}}" autofocus>
+                                                    <input type="text" class="form-control @error('name') is-invalid @enderror" name="name" placeholder="Nombre *"value="{{$user->name}}" autofocus>
+                                                    @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
+
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -91,7 +94,8 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="celular"></label>
-                                                    <input type="text" class="form-control" name="celular" placeholder="Celular" value="{{$user->celular}}" autofocus>
+                                                    <input type="text" class="form-control @error('celular') is-invalid @enderror" name="celular" placeholder="Celular *" value="{{$user->celular}}" autofocus>
+                                                    @error('celular') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -100,8 +104,9 @@
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group">
-                                                    <label for="fechadenacimiento">Fecha de nacimiento</label>
-                                                    <input type="date" class="form-control" name="fechadenacimiento" value="{{$user->fechadenacimiento}}" autofocus>
+                                                    <label for="fechadenacimiento">Fecha de nacimiento *</label>
+                                                    <input type="date" class="form-control @error('fechadenacimiento') is-invalid @enderror" name="fechadenacimiento" value="{{$user->fechadenacimiento}}" autofocus max="<?=date('Y-m-d');?>">
+                                                    @error('fechadenacimiento') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
                                             </div>
                                             <div class="col-md-3">
@@ -111,7 +116,8 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="email"></label>
-                                                    <input type="text" class="form-control" name="email" placeholder="Email" value="{{$user->email}}" autofocus>
+                                                    <input type="text" class="form-control @error('email') is-invalid @enderror" name="email" placeholder="Email *" value="{{$user->email}}" autofocus>
+                                                    @error('email') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>  
                                             </div>  
                                             <div class="col-md-3">
@@ -121,7 +127,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="password"></label>
-                                                    <input type="password" class="form-control" name="password" placeholder="Ingrese la contraseña en caso de modificarla" autofocus>
+                                                    <input type="password" class="form-control " name="password" placeholder="Ingrese la contraseña en caso de modificarla" autofocus>
                                                 </div>
                                             </div>
                                             <div class="col-md-3">

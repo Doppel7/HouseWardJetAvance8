@@ -1,4 +1,4 @@
-<x-jet-action-section>
+<!-- <x-jet-action-section>
     <x-slot name="title">
         {{ __('Browser Sessions') }}
     </x-slot>
@@ -13,9 +13,9 @@
         </div>
 
         @if (count($this->sessions) > 0)
-            <div class="mt-5 space-y-6">
+            <div class="mt-5 space-y-6"> -->
                 <!-- Other Browser Sessions -->
-                @foreach ($this->sessions as $session)
+                <!-- @foreach ($this->sessions as $session)
                     <div class="flex items-center">
                         <div>
                             @if ($session->agent->isDesktop())
@@ -59,10 +59,10 @@
             <x-jet-action-message class="ml-3" on="loggedOut">
                 {{ __('Done.') }}
             </x-jet-action-message>
-        </div>
+        </div> -->
 
         <!-- Log Out Other Devices Confirmation Modal -->
-        <x-jet-dialog-modal wire:model="confirmingLogout">
+        <!-- <x-jet-dialog-modal wire:model="confirmingLogout">
             <x-slot name="title">
                 {{ __('Log Out Other Browser Sessions') }}
             </x-slot>
@@ -95,3 +95,4 @@
         </x-jet-dialog-modal>
     </x-slot>
 </x-jet-action-section>
+ -->

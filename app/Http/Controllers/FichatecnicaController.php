@@ -44,6 +44,15 @@ class FichatecnicaController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'nombre' => 'required|min:5|alpha',
+        ];
+        $messages = [
+            'nombre.required' => 'El campo Nombre de la ficha técnica no puede estar vacío.',
+            'nombre.min' => 'El campo Nombre de la ficha técnica debe llevar al menos 5 carácteres.',
+            'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+        ];
+        $this->validate($request, $rules, $messages);
         $input = $request->all();
         $fichatecnica = Fichatecnica::create([
             "nombre"=>$input["nombre"],
@@ -56,7 +65,7 @@ class FichatecnicaController extends Controller
                 "cantidad"=>  $input["cantidades"][$key],
             ]);
         }
-
+        session()->flash('message', 'Ficha técnica registrada correctamente.');
         return redirect()->route('fichatecnicas.index')->with('success', 'Ficha técnica creada correctamente');
 }
 
@@ -92,7 +101,14 @@ class FichatecnicaController extends Controller
 
     public function update(Request $request, $id)
     {       
-        
+        $rules = [
+            'nombre' => 'required|min:5',
+        ];
+        $messages = [
+            'nombre.required' => 'El campo Nombre de la ficha técnica no puede estar vacío.',
+            'nombre.min' => 'El campo Nombre de la ficha técnica debe llevar al menos 5 carácteres.',
+        ];
+        $this->validate($request, $rules, $messages);
         $fichatecnica=Fichatecnica::findOrFail($id);
         $insumito = [];
         $insumito=$request->insumito;
@@ -152,7 +168,7 @@ class FichatecnicaController extends Controller
             }
         }
         
-        
+        session()->flash('message', 'Ficha técnica editada correctamente.');
         return redirect()->route('fichatecnicas.index');
         
     }

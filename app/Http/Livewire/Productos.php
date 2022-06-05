@@ -51,6 +51,7 @@ class Productos extends Component
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
         'nombre.unique' => 'El producto ya existe.',
+        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
         'precio.required' => 'El campo Precio no puede estar vacío.',
         'precio.numeric' => 'El campo Precio debe llevar solo carácteres numéricos.',
 	];
@@ -64,7 +65,7 @@ class Productos extends Component
     public function store()
     {
         $this->validate([
-		'nombre' => 'required|min:4|unique:productos,nombre',
+		'nombre' => 'required|min:4|alpha|unique:productos,nombre',
 		'precio' => 'required|numeric',
 		'categoria_id' => 'required',
 		'ficha_id' => 'required',
@@ -77,7 +78,7 @@ class Productos extends Component
 			'ficha_id' => $this-> ficha_id,
 
         ]);
-        
+        $this->resetValidation();
         $this->resetInput();
 		$this->emit('closeModal');
 		session()->flash('message', 'Producto creado correctamente.');
@@ -100,7 +101,7 @@ class Productos extends Component
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|unique:productos,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:4|alpha|unique:productos,nombre,'.$this->selected_id,
 		'precio' => 'required|numeric',
 		'categoria_id' => 'required',
 		'ficha_id' => 'required',
@@ -119,6 +120,7 @@ class Productos extends Component
 
             $this->resetInput();
             $this->updateMode = false;
+            $this->emit('closeModal');
 			session()->flash('message', 'Producto editado correctamente.');
         }
     }

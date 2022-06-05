@@ -41,7 +41,8 @@ class Categoriainsumos extends Component
     protected $messages = [
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
-		'nombre.unique' => 'La categoría ya existe.',
+        'nombre.unique' => 'La categoría ya existe.',
+        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
 	];
 
 
@@ -56,7 +57,7 @@ class Categoriainsumos extends Component
     {
         
         $this->validate([
-		'nombre' => 'required|min:4|unique:categoriainsumos,nombre',
+		'nombre' => 'required|min:4|alpha|unique:categoriainsumos,nombre',
         ]);
 
         Categoriainsumo::create([ 
@@ -80,11 +81,11 @@ class Categoriainsumos extends Component
 		
         $this->updateMode = false;
     }
-
+    /* data-dismiss="modal"  */
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|unique:categoriainsumos,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:4|alpha|unique:categoriainsumos,nombre,'.$this->selected_id,
 		'estado' => 'required',
         ]);
                         
@@ -97,9 +98,10 @@ class Categoriainsumos extends Component
 
             
             $this->updateMode = false;
-            /* $this->resetInput(); */
+            $this->resetInput();
+		    $this->emit('closeModal');
             session()->flash('message', 'Categoría de Insumo editada correctamente.');            
-            $this->emit('closeModal');
+            
         }
     }
 

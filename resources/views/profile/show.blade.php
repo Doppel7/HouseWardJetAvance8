@@ -32,7 +32,7 @@
                     @livewire('profile.two-factor-authentication-form')
                 </div>
 
-                <x-jet-section-border />
+                
             @endif
 
             <div class="mt-10 sm:mt-0">
@@ -40,7 +40,7 @@
             </div>
 
             @if (Laravel\Jetstream\Jetstream::hasAccountDeletionFeatures())
-                <x-jet-section-border />
+                <!-- <x-jet-section-border /> -->
 
                 <div class="mt-10 sm:mt-0">
                     @livewire('profile.delete-user-form')

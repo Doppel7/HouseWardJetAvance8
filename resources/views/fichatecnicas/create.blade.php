@@ -29,10 +29,8 @@
                                                 <div class="card-body">
                                                         <div class="form-group">
                                                         <label for="nombre"></label>
-                                                        <input type="text" class="form-control" name="nombre" placeholder="Ingrese el nombre de la ficha" value="{{old('nombre')}}" autofocus>
-                                                        @if ($errors->has('nombre'))
-                                                        <span class="error text-danger" for="input-nombre">{{ $errors->first('nombre') }}</span>
-                                                        @endif
+                                                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" name="nombre" placeholder="Ingrese el nombre de la ficha" value="{{old('nombre')}}" autofocus>
+                                                        @error('nombre') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                         </div>
                                                 </div>
                                             </div>

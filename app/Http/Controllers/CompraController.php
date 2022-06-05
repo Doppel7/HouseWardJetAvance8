@@ -49,6 +49,21 @@ class CompraController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'proveedor_id' => 'required',
+            'factura' => 'required|min:3|unique:compras,factura',
+            'fecha' => 'required',
+            'total' => 'required',
+        ];
+        $messages = [
+            'proveedor_id.required' => 'El campo Proveedor no puede estar vacío.',
+            'factura.required' => 'El campo Factura no puede estar vacío.',
+            'factura.min' => 'El campo Factura debe llevar al menos 3 carácteres.',
+            'factura.unique' => 'La Factura ya existe.',
+            'fecha.required' => 'El campo Fecha de compra no puede estar vacío.',
+            'total.required' => 'Se deben agregar insumos para la compra.',
+        ];
+        $this->validate($request, $rules, $messages);
         
         $input = $request->all();
         $compra = Compra::create([
@@ -70,7 +85,7 @@ class CompraController extends Controller
             $insumo->update(["cantidad"=>$insumo->cantidad + $input["cantidades"][$key]]);
         }
 
-
+        session()->flash('message', 'Compra registrada correctamente.');
         return redirect()->route('compras.index')->with('success', 'Compra creada correctamente');
 
 
@@ -121,18 +136,31 @@ class CompraController extends Controller
     {       
         
         $compras=Compra::findOrFail($id);
+        $rules = [
+            'proveedor_id' => 'required',
+            /* 'factura' => 'required|numeric|min:5|unique:compras,factura,'. request()->id, */
+            'factura' => 'required',
+            'fecha' => 'required',
+            'estado' => 'required',
+            'total' => 'required',
+        ];
+        $messages = [
+            'proveedor_id.required' => 'El campo Proveedor no puede estar vacío.',
+            'factura.required' => 'El campo Factura no puede estar vacío.',
+            /* 'factura.unique' => 'La Factura ya existe.', */
+            'fecha.required' => 'El campo Fecha de compra no puede estar vacío.',
+            'estado.required' => 'El campo Estado no puede estar vacío.',
+            'total.required' => 'Se deben agregar insumos para la compra.',
+        ];
+        $this->validate($request, $rules, $messages);
         $compra_detalle=Compra_detalle::all();
         $insumitos = [];
         $insumitos=$request->insumitos;
-        $data=$request->all(); 
-        $est=$compras->estado;
-        return response()->json($request);
-        
-        /* return response()->json($insumitos); */
-        $compras->update($data);   
-        if($compras->estado==$est)
+        $data=$request->all();
+        $est=$compras->estado;     
+        if($request->estado==$est)
         {
-        }else if ($compras->estado==0) {
+        }else if ($compras->estado==1) {
             $compra_i = DB::select('SELECT * FROM compra_detalles WHERE compra_id=?', [$compras->id]);
             
             foreach ($compra_i as $key) {
@@ -150,7 +178,7 @@ class CompraController extends Controller
         $j = 0;
         
         if($insumitos != null){
-            
+            DB::beginTransaction();
             for ($i=0; $i < strlen($insumitos); $i++) { 
                 if($insumitos[$i] != ","){
                     $array2[$j]=$insumitos[$i];
@@ -174,39 +202,44 @@ class CompraController extends Controller
                             $insumito_borrar= DB::delete("DELETE from compra_detalles where insumo_id= $array[$i] and compra_id = $id");
                             $insumo_upd = DB::update("UPDATE insumos SET cantidad = cantidad - $key->cantidad WHERE  id = ? ", [$array[$i]]); 
                         }else{
+                            DB::rollback();
+                            session()->flash('message', 'No se pudo editar la compra.');
+                            return redirect()->route('compras.index');
                         }
                     } 
                 }
+                DB::commit();
             }
         }
         
         if ($request->insumo_id != null) {
             $insumos=[];
             $insumos2=$request->insumo_id;
-
+            
             $cantidades=[];
             $cantidades2=$request->cantidades;
-
+            
             $precios=[];
             $precios2=$request->precios;
-
+            
             for ($i=0; $i <count($insumos2); $i++) { 
                 $insumos[$i]=intval($insumos2[$i]);
                 $cantidades[$i]=intval($cantidades2[$i]);
                 $precios[$i]=intval($precios2[$i]);
             }
-
+            
             for ($i=0; $i <count($insumos); $i++) { 
                 $sql=DB::insert("insert into compra_detalles (insumo_id, compra_id, cantidad, precio, estado) values (?, ?, ?, ?, ?)", [$insumos[$i], $id, $cantidades[$i], $precios[$i], $request->estado]);
                 $insumo_upd = DB::update("UPDATE insumos SET cantidad = cantidad + $cantidades[$i] WHERE  id = ? ", [$insumos[$i]]); 
             }
         }
         
-        
+        $compras->update($data);  
+        session()->flash('message', 'Compra editada correctamente.');
         return redirect()->route('compras.index');
         
     }
-
+    
     public function destroy($id)
     {
         $compras=Compra::findOrFail($id);

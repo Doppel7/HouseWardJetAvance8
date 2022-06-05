@@ -51,6 +51,7 @@ class Insumos extends Component
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
         'nombre.unique' => 'La insumo ya existe.',
+        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
         'cantidad.required' => 'El campo Cantidad no puede estar vacío.',
         'cantidad.numeric' => 'El campo Cantidad debe llevar solo carácteres numéricos.',
 	];
@@ -67,14 +68,12 @@ class Insumos extends Component
         
 
         $this->validate([
-		'nombre' => 'required|min:4|unique:insumos,nombre',
-		'cantidad' => 'required|numeric',
+		'nombre' => 'required|min:4|alpha|unique:insumos,nombre',
 		'categoria_id' => 'required',
         ]);
 
         Insumo::create([ 
 			'nombre' => $this-> nombre,
-			'cantidad' => $this-> cantidad,
 			'categoria_id' => $this-> categoria_id,
 
             
@@ -102,7 +101,7 @@ class Insumos extends Component
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|unique:insumos,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:4|alpha|unique:insumos,nombre,'.$this->selected_id,
 		'cantidad' => 'required|numeric',
 		'categoria_id' => 'required',
 		'estado' => 'required',
@@ -119,6 +118,7 @@ class Insumos extends Component
 
             $this->resetInput();
             $this->updateMode = false;
+            $this->emit('closeModal');
 			session()->flash('message', 'Insumo editado correctamente.');
         }
     }

@@ -49,13 +49,51 @@ class PedidoController extends Controller
 
     public function store(Request $request)
     {
+        $rules = [
+            'empleado_id' => 'required',
+            'fecha' => 'required',
+            'total' => 'required',
+        ];
+        $messages = [
+            'empleado_id.required' => 'El campo Empleado no puede estar vacío.',
+            'fecha.required' => 'El campo Fecha de pedido no puede estar vacío.',
+            'total.required' => 'Se deben agregar productos para el pedido.',
+        ];
+        $this->validate($request, $rules, $messages);
         $input = $request->all();
-        /* $xdconsulta= DB::select("SELECT * from ficha_detalles where ficha_id = 1");
-        return response()->json($xdconsulta);
-        $je=$xdconsulta[0]->insumo_id; */
-        /* $otraconsulta= DB::select("SELECT id, ficha_id from productos where id = $pedidodetalle->producto_id");
-        $consulta= DB::delete("DELETE from compra_detalles where insumo_id= $array[$i] and compra_id = $id");
-        $insumo_upd = DB::update("UPDATE insumos SET cantidad = cantidad + $key->cantidad WHERE  id = ? ", [$key->insumo_id]); */
+        $productos=$request->producto_id;
+        $productosCantidades=$request->cantidades;
+        /* echo "<br>".$input->producto_id; */
+        /* return response()->json($request->producto_id); */
+        $prod = [];
+        $prodc = [];
+        $ficha = [];
+        DB::beginTransaction();
+        if($productos != null){
+            $j=0; 
+            for ($i=0; $i < count($productos); $i++) {
+                    $prod[$j]=intval($productos[$i]);
+                    $prodc[$j]=intval($productosCantidades[$i]);
+                    $consulta=DB::select("SELECT ficha_id FROM productos WHERE id = $prod[$j]");
+                    $ficha[$j] = $consulta[0]->ficha_id;
+                    $FD=DB::select("SELECT insumo_id, cantidad FROM ficha_detalles where ficha_id = $ficha[$j]");
+                    
+                    for ($h=0; $h < count($FD); $h++) { 
+                        $consulta2=DB::select('SELECT cantidad from insumos where id = ?', [($FD[$h]->insumo_id)]);
+                        $je=$consulta2[0]->cantidad;
+                        if(($je-(($FD[$h]->cantidad)* $prodc[$j]))>=0){
+                            $base = DB::update("UPDATE insumos SET cantidad = ? WHERE id = ? ", [($je-(($FD[$h]->cantidad)* $prodc[$j])), ($FD[$h]->insumo_id)]);
+                        }
+                        else{
+                            DB::rollback();
+                            session()->flash('message', 'Pedido no registrado.');
+                            return redirect()->route('pedidos.index');
+                        }
+                    } 
+                    $j++;
+            }
+            DB::commit();
+        }
         $pedido = Pedido::create([
             "empleado_id"=>$input["empleado_id"],
             "fecha"=>$input["fecha"],
@@ -72,8 +110,8 @@ class PedidoController extends Controller
             ]);
             
         }
-
-        return redirect()->route('pedidos.index')->with('success', 'Pedido creada correctamente');
+        session()->flash('message', 'Pedido registrado correctamente.');
+        return redirect()->route('pedidos.index');
 
     }
     public function calcular_precio($productos,$cantidades,$precios){

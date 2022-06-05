@@ -6,6 +6,15 @@
     <div class="row justify-content-center">
         <div class="col-md-12">
             <div class="card">
+                 @if (session()->has('message'))
+                    @if ( session('message') == 'Ficha técnica registrada correctamente.')
+                    <div wire:poll.4s class="btn btn-sm btn-success time" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} 
+                    </div>
+                    @elseif( session('message') == 'Ficha técnica editada correctamente.')
+                    <div wire:poll.4s class="btn btn-sm btn-success time" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} 
+                    </div>
+                    @endif
+				@endif
                 <div class="card-header">
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
@@ -15,10 +24,6 @@
                         <div wire:poll.60s>
 							<code><h5>{{ now()->format('H:i:s') }} </h5></code>
 						</div>
-						@if (session()->has('message'))
-						<div wire:poll.4s class="btn btn-sm btn-success" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} 
-                        </div>
-						@endif
                         <div>
 							<input wire:model='keyWord' type="text" class="form-control" name="search" id="search" placeholder="Buscar Ficha Técnica">
 						</div>
@@ -82,3 +87,11 @@
 </div>
 @stop
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".time").fadeOut(1500);
+    },3000);
+});
+</script>

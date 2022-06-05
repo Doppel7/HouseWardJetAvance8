@@ -16,7 +16,7 @@ return new class extends Migration
         Schema::create('insumos', function (Blueprint $table) {
             $table->id();
             $table->string('nombre',30);
-            $table->integer('cantidad');
+            $table->integer('cantidad')->default(0);
             $table->bigInteger('categoria_id')->unsigned();
             $table->boolean('estado')->nullable()->default(1);
             $table->timestamps();

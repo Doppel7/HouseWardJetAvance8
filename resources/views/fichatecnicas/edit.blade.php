@@ -30,10 +30,8 @@
                                                 <div class="card-body">
                                                         <div class="form-group">
                                                         <label for="nombre"></label>
-                                                        <input type="text" class="form-control" name="nombre" value="{{$fichatecnica->nombre}}" autofocus>
-                                                        @if ($errors->has('nombre'))
-                                                        <span class="error text-danger" for="input-nombre">{{ $errors->first('nombre') }}</span>
-                                                        @endif
+                                                        <input type="text" class="form-control  @error('nombre') is-invalid @enderror" name="nombre" value="{{$fichatecnica->nombre}}" autofocus>
+                                                        @error('nombre') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                         <input type="hidden" class="form-control" id="insumito"
                                                         name="insumito">
                                                         </div>

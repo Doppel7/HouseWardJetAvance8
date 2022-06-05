@@ -63,6 +63,7 @@ class Proveedores extends Component
 		'documento.unique' => 'El Documento ya existe.',
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
+		'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
         'email.required' => 'El campo Email no puede estar vacío.',
 		'email.email' => 'El formato del correo no es válido.',
 		'direccion.required' => 'El campo Dirección no puede estar vacío.',
@@ -83,7 +84,7 @@ class Proveedores extends Component
         $this->validate([
 		'tipodoc_id' => 'required',
 		'documento' => 'required|numeric|unique:proveedores,documento|min:5',
-		'nombre' => 'required|min:4',
+		'nombre' => 'required|min:4|alpha',
 		'email' => 'required|email',
 		'direccion' => 'required',
 		'celular' => 'required|numeric|unique:proveedores,celular',
@@ -128,7 +129,7 @@ class Proveedores extends Component
         $this->validate([
 		'tipodoc_id' => 'required',
 		'documento' => 'required|numeric|min:5|unique:proveedores,documento,'.$this->selected_id,
-		'nombre' => 'required|min:4',
+		'nombre' => 'required|min:4|alpha',
 		'email' => 'required|email|unique:proveedores,email,'.$this->selected_id,
 		'direccion' => 'required',
 		'celular' => 'required|numeric|unique:proveedores,celular,'.$this->selected_id,
@@ -150,7 +151,8 @@ class Proveedores extends Component
             ]);
 
             $this->resetInput();
-            $this->updateMode = false;
+			$this->updateMode = false;
+			$this->emit('closeModal');
 			session()->flash('message', 'Proveedor editado correctamente.');
         }
     }

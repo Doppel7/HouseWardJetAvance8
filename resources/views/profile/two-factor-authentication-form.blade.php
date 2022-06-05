@@ -1,4 +1,4 @@
-<x-jet-action-section>
+<!-- <x-jet-action-section>
     <x-slot name="title">
         {{ __('Autentiación de doble factor') }}
     </x-slot>
@@ -80,4 +80,4 @@
             @endif
         </div>
     </x-slot>
-</x-jet-action-section>
+</x-jet-action-section> -->

@@ -29,7 +29,7 @@
                                                 <div class="card-body">
                                                 <div class="form-group">
                                     <label for="empleado_id"></label>
-                                    <select class="form-control" name="empleado_id" id="empleado_id">
+                                    <select class="form-control @error('empleado_id') is-invalid @enderror" name="empleado_id" id="empleado_id">
                                         <option value="">Seleccione el empleado</option>
                                         @foreach ( $empleados as $row )
                                         @if ($row->estado==0)
@@ -38,20 +38,19 @@
                                         <option value="{{$row->id}}">{{$row->nombre}}</option>
                                         @endforeach
                                     </select>
-                                    @if ($errors->has('empleado_id'))
+                                    <!-- @if ($errors->has('empleado_id'))
                                     <span class="error text-danger" for="input-empleado_id">{{ $errors->first('empleado_id') }}</span>
-                                    @endif
+                                    @endif -->
                                 </div>
                                 <div class="form-group">
                                                 <label for="fecha">Fecha del Pedido</label>
-                                                <input type="date" class="form-control" name="fecha" placeholder="Ingrese la fecha" value="{{old('fecha')}}" autofocus>
-                                                @if ($errors->has('fecha'))
-                                                <span class="error text-danger" for="input-fecha">{{ $errors->first('fecha') }}</span>
-                                                @endif
+                                                <input type="date" class="form-control @error('fecha') is-invalid @enderror" name="fecha" placeholder="Ingrese la fecha" value="{{old('fecha')}}" autofocus max="<?=date('Y-m-d');?>">
+                                                @error('fecha') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
                                                 <div class="form-group">
                                                 <label for="total">Total</label>
-                                                <input type="number" class="form-control" id="total" name="total" readonly></div>
+                                                <input type="number" class="form-control @error('total') is-invalid @enderror" id="total" name="total" readonly>
+                                                @error('total') <span class="invalid-feedback">{{ $message }}</span> @enderror</div>
                                                 </div>
                                                 </div>
                                                 </div>

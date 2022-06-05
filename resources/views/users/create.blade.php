@@ -32,8 +32,9 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                             <label for="tipodoc_id"></label>
-                                            <select wire:model="tipodoc_id" name="tipodoc_id" id="tipodoc_id" class="form-control">
-                                            <option value="">>-- Escoja el tipo de documento --<</option>
+                                            <select wire:model="tipodoc_id" name="tipodoc_id" id="tipodoc_id" class="form-control @error('tipodoc_id') is-invalid @enderror" value="{{old('tipodoc_id')}}">
+                                            @error('tipodoc_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                            <option value="">>-- Escoja el tipo de documento * --<</option>
                                             @foreach($tipodocumentos as $tipodocumento)
                                             <option value="{{$tipodocumento['id']}}">{{$tipodocumento['nombre']}}</option>
                                             @endforeach
@@ -47,8 +48,9 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                             <label for="tipodoc_id"></label>
-                                            <select wire:model="rol_id"   name="rol_id" id="rol_id" class="form-control">
-                                            <option value="">>-- Escoja el rol --<</option>
+                                            <select name="rol_id" id="rol_id" class="form-control @error('rol_id') is-invalid @enderror" value="{{old('rol_id')}}">
+                                            @error('rol_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                            <option value="">>-- Escoja el rol * --<</option>
                                             @foreach($roles as $role)
                                             <option value="{{$role['id']}}">{{$role['nombre']}}</option>
                                             @endforeach
@@ -62,7 +64,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="documento"></label>
-                                                <input type="text" class="form-control" name="documento" placeholder="Ingrese el documento" autofocus>
+                                                <input wire:model="documento" type="text" class="form-control @error('documento') is-invalid @enderror" name="documento"  value="{{old('documento')}}" placeholder="Ingrese el documento *" autofocus >
+                                                @error('documento') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -72,7 +75,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                                 <label for="name"></label>
-                                                <input type="text" class="form-control" name="name" placeholder="Ingrese nombre" autofocus>
+                                                <input wire:model="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{old('name')}}" placeholder="Ingrese el nombre *" autofocus>
+                                                @error('name') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -82,7 +86,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                             <label for="celular"></label>
-                                                <input type="text" class="form-control" name="celular" placeholder="Ingrese celular" autofocus>
+                                                <input wire:model="celular" type="text" class="form-control @error('celular') is-invalid @enderror" name="celular" value="{{old('celular')}}" placeholder="Ingrese el celular *" autofocus>
+                                                @error('celular') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -91,8 +96,9 @@
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group">
-                                            <label for="fechadenacimiento">Fecha de nacimiento</label>
-                                                <input type="date" class="form-control" name="fechadenacimiento" placeholder="Ingrese la fechade nacimiento" autofocus>
+                                            <label for="fechadenacimiento">Fecha de nacimiento *</label>
+                                                <input wire:model="fechadenacimiento" type="date" class="form-control @error('fechadenacimiento') is-invalid @enderror" name="fechadenacimiento" value="{{old('fechadenacimiento')}}" placeholder="Ingrese la fecha de nacimiento *" autofocus max="<?=date('Y-m-d');?>">
+                                                @error('fechadenacimiento') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -102,7 +108,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                             <label for="email"></label>
-                                                <input type="text" class="form-control" name="email" placeholder="Ingrese email" autofocus>
+                                                <input wire:model="email" type="text" class="form-control @error('email') is-invalid @enderror" name="email" value="{{old('email')}}" placeholder="Ingrese el email *" autofocus>
+                                                @error('email') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-3">
@@ -112,7 +119,8 @@
                                         <div class="col-md-6">
                                             <div class="form-group">
                                             <label for="password"></label>
-                                            <input type="password" class="form-control" name="password" placeholder="Contraseña" autofocus>
+                                            <input wire:model="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" value="{{old('password')}}" placeholder="Contraseña *" autofocus>
+                                            @error('password') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                             </div>
                                         </div>
                                         <div class="col-md-12">

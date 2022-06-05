@@ -30,8 +30,9 @@
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label for="proveedor_id"></label>
-                                                        <select class="form-control" name="proveedor_id"
+                                                        <select class="form-control @error('proveedor_id') is-invalid @enderror" name="proveedor_id"
                                                             id="proveedor_id" value="{{$compras->proveedor_id}}">
+                                                            @error('proveedor_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                             <option value="">Seleccione el proveedor</option>
                                                             @foreach ( $proveedores as $proveedore )
                                                             <option @if ($proveedore->id==$compras->proveedor_id)
@@ -45,25 +46,19 @@
 
                                                             @endforeach
                                                         </select>
-                                                        @if ($errors->has('proveedor_id'))
-                                                        <span class="error text-danger"
-                                                            for="input-proveedor_id">{{ $errors->first('proveedor_id') }}</span>
-                                                        @endif
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="fecha">Fecha de Compra</label>
-                                                        <input type="date" class="form-control" name="fecha"
+                                                        <input type="date" class="form-control @error('fecha') is-invalid @enderror" name="fecha"
                                                             placeholder="Ingrese la fecha" value="{{$compras->fecha}}"
-                                                            autofocus>
-                                                        @if ($errors->has('fecha'))
-                                                        <span class="error text-danger"
-                                                            for="input-fecha">{{ $errors->first('fecha') }}</span>
-                                                        @endif
+                                                            max="<?=date('Y-m-d');?>">
+                                                            @error('fecha') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="estado"></label>
                                                         <select name="estado" value="{{$compras->estado}}" id="estado"
-                                                            class="form-control">
+                                                            class="form-control @error('estado') is-invalid @enderror">
+                                                            @error('estado') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                             @if ($compras->estado==0)
                                                             <option value="0">Inactivo</option>
                                                             <option value="1">Activo</option>
@@ -79,18 +74,16 @@
                                                 <div class="card-body">
                                                     <div class="form-group">
                                                         <label for="factura"></label>
-                                                        <input type="text" class="form-control" name="factura"
+                                                        <input type="text" class="form-control @error('factura') is-invalid @enderror" name="factura"
                                                             placeholder="Ingrese numero de factura"
-                                                            value="{{$compras->factura}}" autofocus>
-                                                        @if ($errors->has('factura'))
-                                                        <span class="error text-danger"
-                                                            for="input-factura">{{ $errors->first('factura') }}</span>
-                                                        @endif
+                                                            value="{{old('factura', $compras->factura)}}" autofocus>
+                                                            @error('factura') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                     </div>
                                                     <div class="form-group">
                                                         <label for="total">Total</label>
-                                                        <input type="number" class="form-control" id="total"
-                                                            name="total" value="{{$compras->total}}" readonly></div>
+                                                        <input type="number" class="form-control @error('total') is-invalid @enderror" id="total"
+                                                            name="total" value="{{$compras->total}}" readonly>
+                                                            @error('total') <span class="invalid-feedback">{{ $message }}</span> @enderror</div>
                                                     <input type="hidden" class="form-control" id="insumitos"
                                                         name="insumitos">
                                                 </div>
@@ -204,6 +197,7 @@
     </div>
 </div>
 <script>
+    let array=[];
 function agregar_insumo() {
     let insumo_id = $("#insumo option:selected").val();
     let insumo_text = $("#insumo option:selected").text();
@@ -211,6 +205,16 @@ function agregar_insumo() {
     let precio = $("#precio").val();
 
     if (insumo_id > 0 && cantidad > 0 && precio > 0) {
+        array.push(insumo_id);
+                for(var j = 0; j < array.length; j++){
+                for(var i = j+1; i < array.length; i++){
+                    if(array[j] == array[i] && insumo_id == array[i]){
+                        alert("El insumo "+insumo_text+" ya esta registrado en la compra");
+                        array.pop();
+                        die();
+                    }
+                }
+                }
         $("#tblInsumos").append(`
                         <tr id="tr-${insumo_id}">
 
@@ -243,6 +247,11 @@ function agregar_insumo() {
 let insumitos = [];
 
 function eliminar_insumo(id, subtotal) {
+     id = id.toString();
+                var index = array.indexOf(id);
+                if (index !== -1){
+                    array.splice(index, 1);
+                }
     
         if(insumitos.includes(id, 0)){
 

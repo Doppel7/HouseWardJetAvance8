@@ -6,6 +6,15 @@
     <div class="row justify-content-center">
             <div class="col-md-12">
                 <div class="card">
+                    @if (session()->has('message'))
+                        @if ( session('message') == 'Usuario registrado correctamente.')
+                        <div wire:poll.4s class="btn btn-sm btn-success time" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} 
+                        </div>
+                        @elseif( session('message') == 'Usuario editado correctamente.')
+                        <div wire:poll.4s class="btn btn-sm btn-success time" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} 
+                        </div>
+                        @endif
+					@endif
                     <div class="card-header">
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                             <div class="float-left">
@@ -15,10 +24,6 @@
                             <div wire:poll.60s>
                                 <code><h5>{{ now()->format('H:i:s') }} </h5></code>
 						    </div>
-						    @if (session()->has('message'))
-						    <div wire:poll.4s class="btn btn-sm btn-success" style="margin-top:0px; margin-bottom:0px;"> {{ session('message') }} 
-                            </div>
-						    @endif
                             <div>
                             <input wire:model='keyWord' type="text" class="form-control" name="search" id="search" placeholder="Buscar Usuario">
 						    </div>
@@ -37,13 +42,12 @@
                                         <tr>
                                             <th>#</th>
                                             <th>Rol</th>
-                                            <th>Tipo Documento</th>
+                                            <th>Tipo de documento</th>
                                             <th>Documento</th>
                                             <th>Nombre</th>
                                             <th>Email</th>
                                             <th>Celular</th>
-                                            <th>Fecha de Nacimiento</th>
-                                            <th>Created at</th>
+                                            <th>Fecha de nacimiento</th>
                                             <th>Estado</th>
                                             <th>Acciones</th>
                                         </tr>
@@ -69,12 +73,11 @@
                                                 <td>{{$user->email}}</td>
                                                 <td>{{$user->celular}}</td>
                                                 <td>{{$user->fechadenacimiento}}</td>
-                                                <td>{{$user->created_at}}</td>
                                                 <td>
 										        @if($user->estado==1)
-										        <button type="button" class="btn btn-sm btn-success">Activo</button>
+										        <p style="color:green"><strong>Activo</strong></p>
 										        @else
-										        <button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                                <p style="color:red"><strong>Inactivo</strong></p>
 										        @endif
 								                </td>
                                                 <td width="90">
@@ -104,3 +107,11 @@
 </div>
 @stop
 </div>
+<script src="https://code.jquery.com/jquery-3.2.1.js"></script>
+<script type="text/javascript">
+$(document).ready(function() {
+    setTimeout(function() {
+        $(".time").fadeOut(1500);
+    },3000);
+});
+</script>

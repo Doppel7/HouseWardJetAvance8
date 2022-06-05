@@ -6,6 +6,11 @@
 		$('#createDataModal').modal('hide');
 	});
 </script>
+<script type="text/javascript">
+	window.livewire.on('closeModal', () => {
+		$('#updateModal').modal('hide');
+	});
+</script>
 @section('content')
 <div class="container-fluid">
     <div class="row justify-content-center">
