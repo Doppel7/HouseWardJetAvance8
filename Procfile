@@ -1,0 +1,1 @@
+web: vendor/bin/hgit commit -am "make it better"
