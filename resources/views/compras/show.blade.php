@@ -43,7 +43,7 @@
                                         @foreach ($insumos as $row)
                                             <td>{{$loop->iteration}}</td>
                                             <td>{{ $row->nombre}}</td>
-                                            <td>{{ $row->cantidad_c}}</td>                             
+                                            <td>{{ $row->cantidad_c}} {{ $row->nombre_u}}</td>                             
                                             <td>{{ $row->precio_c}}</td>
                                             <td>{{ $row->precio_c * $row->cantidad_c}}</td>
                                         </tr>

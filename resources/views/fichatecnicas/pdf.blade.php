@@ -95,11 +95,12 @@ tr:hover td {
                                                             </tr>
                                                         </thead>
                                                         <tbody>
+                                                            
+                                                            @foreach ($insumos as $row)
                                                             <tr>
-                                                                @foreach ($insumos as $row)
                                                                 <td>{{$loop->iteration}}</td>
-                                                                <td>{{ $row->nombre}}</td>
-                                                                <td>{{ $row->cantidad_c}}</td>                             
+                                                                <td>{{ $row->nombre}} </td>
+                                                                <td>{{ $row->cantidad_c}} {{ $row->nombre_u}}</td>                             
                                                             </tr>
                                                             @endforeach
                                                         </tbody>

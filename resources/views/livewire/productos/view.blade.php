@@ -1,5 +1,6 @@
 @section('title', __('Productos'))
 <div class="container-fluid">
+<br>
 	<div class="row justify-content-center">
 		<div class="col-md-12">
 			<div class="card">
@@ -36,9 +37,9 @@
 								<th>Nombre</th>
 								<th>Precio</th>
 								<th>Categoría</th>
-								<th>Ficha Técnica</th>
+								<th>Ficha técnica</th>
 								<th>Estado</th>
-								<td>Acciones</td>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -61,9 +62,9 @@
 								@endforeach
 								<td>
 										@if($row->estado==''|| $row->estado==1)
-										<button type="button" class="btn btn-sm btn-success">Activo</button>
+											<p style="color:green"><strong>Activo</strong></p>
 										@else
-										<button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                        	<p style="color:red"><strong>Inactivo</strong></p>
 										@endif	
 								</td>
 								<td width="90">
@@ -73,7 +74,7 @@
 									</button>
 									<div class="dropdown-menu dropdown-menu-right">
 									<a data-toggle="modal" data-target="#updateModal" class="dropdown-item" wire:click="edit({{$row->id}})"><i class="fa fa-edit"></i> Editar </a>							 
-									<a class="dropdown-item" onclick="confirm('Confirm Delete Producto id {{$row->id}}? \nDeleted Productos cannot be recovered!')||event.stopImmediatePropagation()" wire:click="destroy({{$row->id}})"><i class="fa fa-trash"></i> Delete </a>   
+								
 									</div>
 								</div>
 								</td>

@@ -46,21 +46,21 @@
     <div style="text-align:center;">
         <div style="margin: 0 auto;">
                 <img  src="vendor/adminlte/dist/img/logo2.png" alt="">
-            </div>
-            <h2 style="padding-top:5px; margin: 0 auto; display: inline-block">PDF Compras</h2>
         </div>
+        <h2 style="padding-top:5px; margin: 0 auto; display: inline-block">PDF Compras</h2>
+    </div>
     <div class="card-body">
-            <div class="table-responsive">
-                <table id="compras" class="table table-bordered table-sm" style="margin: auto auto; padding: 20px">
-                    <thead class="thead">
+        <div class="table-responsive">
+            <table id="compras" class="table table-bordered table-sm" style="margin: auto auto; padding: 20px">
+                <thead class="thead">
                     <tr>
                         <th>Factura</th>
                         <th>Fecha</th>
                         <th>Proveedor</th>
                         <th>Total</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     @foreach ($compras as $compra)
                     <tr>
                         <td>{{ $compra->factura}}</td>
@@ -69,56 +69,56 @@
                         <td>{{ $compra->total }}</td>
                         
                     @endforeach
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
-        <div class="content">
-            <div class="container-fluid">
-                <div class="row">
-                        <div class="col-md-12">
-                                <div class="card">
-                                    <div class="card-header">
+    </div>
+    <div class="content">
+        <div class="container-fluid">
+            <div class="row">
+                    <div class="col-md-12">
+                            <div class="card">
+                                <div class="card-header">
                                     <div style="display: flex; justify-content: space-between; align-items: center;">     
-                                <div class="card-body">
-                                    @if (session('success'))
-                                   <div class="alert alert-success" role="success">
-                                        {{ session('success') }}
-                                    </div>
-                                    @endif
+                                        <div class="card-body">
+                                        @if (session('success'))
+                                            <div class="alert alert-success" role="success">
+                                            {{ session('success') }}
+                                            </div>
+                                        @endif
                                     <div class="card-body">
                                         <div class="table-responsive">
                                             <table id="compras" class="table table-bordered table-sm" style="margin: auto auto;">
                                                 <thead class="thead">
-                                                <tr>
-                                                <th>#</th>
-                                                <th>Insumo</th>
-                                                <th>Cantidad</th>
-                                                <th>Precio</th>
-                                                <th>Sub Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
+                                                    <tr>
+                                                    <th>#</th>
+                                                    <th>Insumo</th>
+                                                    <th>Cantidad</th>
+                                                    <th>Precio</th>
+                                                    <th>Sub Total</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                
                                                 @foreach ($insumos as $row)
+                                                <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td>{{ $row->nombre}}</td>
-                                                    <td>{{ $row->cantidad_c}}</td>                             
+                                                    <td>{{ $row->cantidad_c}} {{ $row->nombre_u}}</td>                             
                                                     <td>{{ $row->precio_c}}</td>
                                                     <td>{{ $row->precio_c * $row->cantidad_c}}</td>
                                                 </tr>
-                                             @endforeach
-                                            </tbody>
-                                        </table>
+                                                @endforeach
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
                     </div>
-                </div>
-                </div>
             </div>
         </div>
-        @endif
+    </div>
+@endif
 </body>
 </html>

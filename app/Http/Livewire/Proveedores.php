@@ -58,18 +58,20 @@ class Proveedores extends Component
 
 	protected $messages = [
 		'documento.required' => 'El campo Documento no puede estar vacío.',
-		'documento.min' => 'El campo Documento debe llevar al menos 5 carácteres numéricos.',
+		'documento.min' => 'El campo Documento debe llevar al menos 6 carácteres numéricos.',
 		'documento.numeric' => 'El campo Documento debe llevar solo carácteres numéricos.',
 		'documento.unique' => 'El Documento ya existe.',
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
-		'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+		'nombre.regex' => 'El campo Nombre debe contener solo letras.',
         'email.required' => 'El campo Email no puede estar vacío.',
 		'email.email' => 'El formato del correo no es válido.',
 		'direccion.required' => 'El campo Dirección no puede estar vacío.',
 		'celular.required' => 'El campo Celular no puede estar vacío.',
 		'celular.numeric' => 'El campo Celular debe llevar solo carácteres numéricos.',
-		'celular.unique' => 'El Celular ya existe.',
+		'celular.min' => 'El campo Celular debe llevar al menos 10 carácteres numéricos.',
+		'celular.max' => 'El campo Celular no debe llevar más de 10 carácteres numéricos.',
+		
 	];
 
 	public function hydrate()
@@ -83,11 +85,11 @@ class Proveedores extends Component
 		
         $this->validate([
 		'tipodoc_id' => 'required',
-		'documento' => 'required|numeric|unique:proveedores,documento|min:5',
-		'nombre' => 'required|min:4|alpha',
+		'documento' => 'required|numeric|unique:proveedores,documento|min:100000',
+		'nombre' => 'required|min:4|regex:/^[\pL\s\-]+$/u',
 		'email' => 'required|email',
 		'direccion' => 'required',
-		'celular' => 'required|numeric|unique:proveedores,celular',
+		'celular' => 'required|numeric|min:1000000000|max:9999999999',
 		'categoria_id' => 'required',
         ]);
 
@@ -128,11 +130,11 @@ class Proveedores extends Component
     {
         $this->validate([
 		'tipodoc_id' => 'required',
-		'documento' => 'required|numeric|min:5|unique:proveedores,documento,'.$this->selected_id,
+		'documento' => 'required|numeric|min:100000|unique:proveedores,documento,'.$this->selected_id,
 		'nombre' => 'required|min:4|alpha',
-		'email' => 'required|email|unique:proveedores,email,'.$this->selected_id,
+		'email' => 'required|email',
 		'direccion' => 'required',
-		'celular' => 'required|numeric|unique:proveedores,celular,'.$this->selected_id,
+		'celular' => 'required|numeric|min:1000000000|max:9999999999',
 		'categoria_id' => 'required',
 		'estado' => 'required',
         ]);

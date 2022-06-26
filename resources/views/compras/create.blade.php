@@ -31,7 +31,7 @@
                                     <label for="proveedor_id"></label>
                                     <select class="form-control @error('proveedor_id') is-invalid @enderror" name="proveedor_id" id="proveedor_id">
                                     @error('proveedor_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
-                                        <option value="">Seleccione el proveedor</option>
+                                        <option value="">--> Seleccione el proveedor * <--</option>
                                         @foreach ( $proveedores as $row )
                                         @if ($row->estado==0)
                                         @continue
@@ -42,7 +42,7 @@
                                     
                                 </div>
                                 <div class="form-group">
-                                                <label for="fecha">Fecha de Compra</label>
+                                                <label for="fecha">Fecha de Compra *</label>
                                                 <input type="date" class="form-control @error('fecha') is-invalid @enderror" name="fecha" placeholder="Ingrese la fecha" value="{{old('fecha')}}"  max="<?=date('Y-m-d');?>">
                                                 @error('fecha') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
@@ -52,11 +52,11 @@
                                             <div class="card-body">
                                             <div class="form-group">
                                                 <label for="factura"></label>
-                                                <input type="text" class="form-control @error('factura') is-invalid @enderror" name="factura" placeholder="Ingrese numero de factura" value="{{old('factura')}}" autofocus>
+                                                <input type="text" class="form-control @error('factura') is-invalid @enderror" name="factura" placeholder="Ingrese numero de factura *" value="{{old('factura')}}" autofocus>
                                                 @error('factura') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                <label for="total">Total</label>
+                                                <label for="total">Total *</label>
                                                 <input type="number" class="form-control @error('total') is-invalid @enderror" id="total" name="total" readonly>
                                                 @error('total') <span class="invalid-feedback">{{ $message }}</span> @enderror</div>
                                             </div>
@@ -111,13 +111,17 @@
                             <form>
                                 <div class="form-group">
                                     <label for="insumo"></label>
-                                    <select class="form-control " name="insumo" id="insumo" required>
+                                    <select class="form-control " name="insumo" id="insumo" onchange="colocar_unidad()" required>
                                         <option value="">Seleccione el insumo</option>
                                         @foreach ( $insumos as $row )
-                                        @if ($row->estado==0)
+                                        @if($row->estado==0)
                                         @continue
                                         @endif
-                                        <option value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @foreach($unidades as $unidade)
+                                        @if ($row->unidad_id==$unidade->id)
+                                        <option unidad_id="{{$unidade->nombre}}" value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @endif
+                                        @endforeach
                                         @endforeach
                                     </select>
                                         @if ($errors->has('insumo'))
@@ -130,6 +134,10 @@
                                         @if ($errors->has('cantidad'))
                                         <span class="error text-danger" for="input-cantidad">{{ $errors->first('cantidad') }}</span>
                                         @endif
+                                </div>
+                                <div class="form-group">
+                                        <label for="unidad_id"></label>
+                                        <input type="text" class="form-control" id="unidad_id" name="unidad_id" placeholder="Unidad" readonly required>
                                 </div>
                                 <div class="form-group">
                                         <label for="precio"></label>
@@ -150,11 +158,15 @@
 <script>
             let array=[];
             
-
+            function colocar_unidad(){
+            let unidad_id= $("#insumo option:selected").attr("unidad_id");
+            $("#unidad_id").val(unidad_id);
+            }
 
             function agregar_insumo(){
                 let insumo_id = $("#insumo option:selected").val();
                 let insumo_text = $("#insumo option:selected").text();
+                let unidad_id = $("#unidad_id").val();
                 let cantidad = $("#cantidad").val();
                 let precio = $("#precio").val();
 
@@ -179,7 +191,7 @@
                                 ${insumo_text}
 
                             </td>
-                            <td>${cantidad}</td>
+                            <td>${cantidad} ${unidad_id}</td>
                             <td>${precio}</td>
                             <td>${parseInt(precio) * parseInt(cantidad)}</td>
                             <td>
@@ -195,6 +207,7 @@
                     alert("Se debe ingresar una cantidad y/o precio valido");
                 }
                 $("#insumo").val('');
+                $("#unidad_id").val('');
                 $("#cantidad").val('');
                 $("#precio").val('');
 

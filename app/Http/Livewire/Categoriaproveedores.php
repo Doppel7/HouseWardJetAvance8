@@ -39,9 +39,9 @@ class Categoriaproveedores extends Component
 
     protected $messages = [
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
-		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
+		'nombre.min' => 'El campo Nombre debe llevar al menos 3 carácteres.',
         'nombre.unique' => 'La categoría ya existe.',
-        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+        'nombre.regex' => 'El campo Nombre debe contener solo letras.',
     ];
     
     public function hydrate()
@@ -53,7 +53,7 @@ class Categoriaproveedores extends Component
     public function store()
     {
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:categoriaproveedores,nombre',
+		'nombre' => 'required|min:3|regex:/^[\pL\s\-]+$/u|unique:categoriaproveedores,nombre',
         ]);
 
         Categoriaproveedore::create([ 
@@ -80,7 +80,7 @@ class Categoriaproveedores extends Component
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:categoriaproveedores,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:3|regex:/^[\pL\s\-]+$/u|unique:categoriaproveedores,nombre,'.$this->selected_id,
 		'estado' => 'required',
         ]);
 

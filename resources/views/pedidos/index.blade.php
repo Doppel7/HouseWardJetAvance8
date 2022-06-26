@@ -59,11 +59,11 @@
                                 @endforeach
                                 <td>{{ $pedido->fecha}}</td>
                                 <td>{{ $pedido->total }}</td>
-                                <td class="td-actions text-right">
+                                <td>
                                     @if ($pedido->estado==1)
-                                        <button type="button" class="btn btn-sm btn-success">Activo</button>
-                                    @else
-                                        <button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                        <p style="color:green"><strong>Activo</strong></p>
+									@else
+                                        <p style="color:red"><strong>Inactivo</strong></p>
                                     @endif
                                 </td>
                                 <td width="90">
@@ -75,15 +75,7 @@
                                                 <a href="{{route('pedidos.pdf', $pedido->id)}}"
                                                 class="dropdown-item"><i class="fa fa-edit"></i> PDF </a>
                                         <a href="{{route('pedidos.show', $pedido->id)}}"
-                                        class="dropdown-item"><i class="fa fa-edit"></i> Ver </a>	
-
-                                        <a action="{{route('pedidos.destroy', $pedido->id)}}" method="post" style="display: inline-block;" onsubmit="return confirm('¿Está seguro de anular esta compra?')">
-                                        @csrf
-                                        @method('DELETE')
-                                        <button class="btn btn-danger" type="submit" rel="tooltip">
-                                        <i class="material-icons">close</i>
-                                        </button>
-                                        </a>
+                                        class="dropdown-item"><i class="fa fa-edit"></i> Ver </a>
                                         </div>
                                     </div>
                                 </td>

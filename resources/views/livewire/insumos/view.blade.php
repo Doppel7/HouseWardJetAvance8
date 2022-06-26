@@ -37,7 +37,7 @@
 								<th>Cantidad</th>
 								<th>Categoría</th>
 								<th>Estado</th>
-								<td>Acciones</td>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -45,7 +45,14 @@
 							<tr>
 								<td>{{ $loop->iteration }}</td> 
 								<td>{{ $row->nombre }}</td>
-								<td>{{ $row->cantidad }}</td>
+								<td>{{ $row->cantidad }}
+										@foreach($unidades as $unidade)
+										@if($row->unidad_id==$unidade->id)
+										{{ $unidade->nombre}}
+										@break;
+										@endif
+										@endforeach
+									</td>
 								@foreach($categoriainsumos as $categoriainsumo)
 								@if($row->categoria_id==$categoriainsumo->id)
 								<td>{{ $categoriainsumo->nombre}}</td>
@@ -53,11 +60,11 @@
 								@endif
 								@endforeach
 								<td>
-										@if($row->estado==''|| $row->estado==1)
-										<button type="button" class="btn btn-sm btn-success">Activo</button>
-										@else
-										<button type="button" class="btn btn-sm btn-danger">Inactivo</button>
-										@endif	
+									@if($row->estado == ''|| $row->estado==1)
+									<p style="color:green"><strong>Activo</strong></p>
+									@else
+                                    <p style="color:red"><strong>Inactivo</strong></p>
+									@endif
 								</td>
 								<td width="90">
 								<div class="btn-group">
@@ -66,7 +73,7 @@
 									</button>
 									<div class="dropdown-menu dropdown-menu-right">
 									<a data-toggle="modal" data-target="#updateModal" class="dropdown-item" wire:click="edit({{$row->id}})"><i class="fa fa-edit"></i> Editar </a>							 
-									<a class="dropdown-item" onclick="confirm('Confirm Delete Insumo id {{$row->id}}? \nDeleted Insumos cannot be recovered!')||event.stopImmediatePropagation()" wire:click="destroy({{$row->id}})"><i class="fa fa-trash"></i> Eliminar </a>   
+								
 									</div>
 								</div>
 								</td>

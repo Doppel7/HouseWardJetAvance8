@@ -24,7 +24,7 @@
                             @csrf
                             @method('PUT')
                             <div class="card-body">
-                            <p class="card-category">Editar Datos</p>
+                            <p class="card-category"><strong>Editar Datos</strong></p>
                             <div class="row">
                                 <div class="col-12 grid-margin">
                                     <div class="card">

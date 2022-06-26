@@ -13,7 +13,7 @@ class Insumo extends Model
 
     protected $table = 'insumos';
 
-    protected $fillable = ['nombre','cantidad','categoria_id','estado'];
+    protected $fillable = ['nombre','cantidad','unidad_id','categoria_id','estado'];
 	
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
@@ -21,6 +21,10 @@ class Insumo extends Model
     public function categoriainsumo()
     {
         return $this->hasOne('App\Models\Categoriainsumo', 'id', 'categoria_id');
+    }
+    public function unidade()
+    {
+        return $this->hasOne('App\Models\Unidade', 'id', 'unidad_id');
     }
     
 }

@@ -98,8 +98,9 @@ tr:hover td {
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                
                                                 @foreach ($productos as $row)
+                                                <tr>
                                                     <td>{{$loop->iteration}}</td>
                                                     <td>{{ $row->nombre}}</td>
                                                     <td>{{ $row->cantidad_p}}</td>                             

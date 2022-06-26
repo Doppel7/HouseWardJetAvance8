@@ -19,7 +19,7 @@
                     <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
 							<h4><i class="fab fa-laravel text-info"></i>
-                            Fichas Técnicas</h4>
+                            Fichas técnicas</h4>
 					    </div>
                         <div wire:poll.60s>
 							<code><h5>{{ now()->format('H:i:s') }} </h5></code>
@@ -51,11 +51,11 @@
                             <tr>
                                 <td>{{$loop->iteration}}</td>
                                 <td>{{ $ficha->nombre}}</td>
-                                <td class="td-actions text-right">
+                                <td>
                                     @if ($ficha->estado==1)
-                                        <button type="button" class="btn btn-sm btn-success">Activo</button>
-                                    @else
-                                        <button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                        <p style="color:green"><strong>Activo</strong></p>
+									@else
+                                        <p style="color:red"><strong>Inactivo</strong></p>
                                     @endif
                                 </td>
                                 <td width="90">

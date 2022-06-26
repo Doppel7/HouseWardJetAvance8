@@ -1,3 +1,5 @@
+
+
 @extends('adminlte::page')
 
 @section('title', 'Dashboard')
@@ -7,7 +9,10 @@
 @stop
 
 @section('content')
-    <p>Welcome to this beautiful admin panel.</p>
+    <p>AQUÍ MI FAFA</p>
+    @php
+
+    @endphp
 @stop
 
 @section('css')

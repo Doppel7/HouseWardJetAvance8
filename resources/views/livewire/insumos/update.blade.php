@@ -3,7 +3,7 @@
     <div class="modal-dialog" role="document">
        <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="updateModalLabel">Editar Insumo</h5>
+                <h5 class="modal-title" id="updateModalLabel">Editar insumo</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span wire:click.prevent="cancel()" aria-hidden="true">×</span>
                 </button>
@@ -13,17 +13,25 @@
 					<input type="hidden" wire:model="selected_id">
             <div class="form-group">
                 <label for="nombre"></label>
-                <input wire:model="nombre" type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" placeholder="Nombre">@error('nombre') <span class="error text-danger">{{ $message }}</span> @enderror
+                <input wire:model="nombre" type="text" class="form-control @error('nombre') is-invalid @enderror" id="nombre" placeholder="Nombre *">@error('nombre') <span class="error text-danger">{{ $message }}</span> @enderror
             </div>
             <div class="form-group">
-                <label for="cantidad"></label>
-                <input wire:model="cantidad" type="text" class="form-control @error('cantidad') is-invalid @enderror" id="cantidad" placeholder="Cantidad">@error('cantidad') <span class="error text-danger">{{ $message }}</span> @enderror
+                <label for="unidad_id"></label>
+                <select wire:model="unidad_id"   name="unidad_id" id="unidad_id" class="form-control @error('unidad_id') is-invalid @enderror">
+                    <option value="">>-- Escoja la unidad * --<</option>
+                    @foreach($unidades as $row)
+                    <option value="{{$row['id']}}">{{$row['nombre']}}</option>
+                    @endforeach
+                </select>
             </div>
             <div class="form-group">
                 <label for="categoria_id"></label>
                 <select wire:model="categoria_id"   name="categoria_id" id="categoria_id" class="form-control @error('categoria_id') is-invalid @enderror">
-                    <option value="">>-- Escoja la categoría --<</option>
+                    <option value="">>-- Escoja la categoría * --<</option>
                     @foreach($categoriainsumos as $row)
+                    @if($row->estado==0)
+                    @continue
+                    @endif
                     <option value="{{$row['id']}}">{{$row['nombre']}}</option>
                     @endforeach
                 </select>

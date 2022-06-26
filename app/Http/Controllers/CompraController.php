@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CompraCreateRequest;
 use App\Models\Compra;
 use App\Models\Compra_detalle;
+use App\Models\Unidade;
 use App\Models\Proveedore;
 use App\Models\Insumo;
 use Illuminate\Http\Request;
@@ -25,15 +26,21 @@ class CompraController extends Controller
     
     public function pdf(Request $request, $id){
         $compras= DB::select('SELECT factura, fecha, total, p.nombre from compras as c JOIN proveedores as p where c.id=? and p.id= c.proveedor_id', [$id]);
+        $unidades = Unidade::all();
         $insumos = [];
         $a = Compra::find($id);
         if($a != null){
-            $insumos = Insumo::select("insumos.*", "compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
+            /* $insumos = Insumo::select("insumos.*", "compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
             ->join("compra_detalles", "insumos.id", "=", "compra_detalles.insumo_id")
+            ->where("compra_detalles.compra_id", $id)
+            ->get(); */
+            $insumos = Insumo::select("insumos.*", "unidades.nombre as nombre_u","compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
+            ->join("compra_detalles", "insumos.id", "=", "compra_detalles.insumo_id")
+            ->join("unidades","insumos.unidad_id", "=", "unidades.id")
             ->where("compra_detalles.compra_id", $id)
             ->get();
         }
-        $pdf = PDF::loadView('compras.pdf',['compras'=>$compras, 'insumos'=>$insumos]);
+        $pdf = PDF::loadView('compras.pdf',['compras'=>$compras, 'insumos'=>$insumos, 'unidades'=>$unidades]);
         return $pdf->download('___compras.pdf');
     }
 
@@ -41,9 +48,10 @@ class CompraController extends Controller
     {
         $compra = new Compra;
         $compras = Compra::all();
+        $unidades = Unidade::all();
         $proveedores = Proveedore::all();
         $insumos = Insumo::all();
-        return view('compras.create', compact('compras','proveedores','insumos'));
+        return view('compras.create', compact('compras','proveedores','insumos','unidades'));
 
     }
 
@@ -51,14 +59,14 @@ class CompraController extends Controller
     {
         $rules = [
             'proveedor_id' => 'required',
-            'factura' => 'required|min:3|unique:compras,factura',
+            'factura' => 'required|unique:compras,factura',
             'fecha' => 'required',
             'total' => 'required',
         ];
         $messages = [
             'proveedor_id.required' => 'El campo Proveedor no puede estar vacío.',
             'factura.required' => 'El campo Factura no puede estar vacío.',
-            'factura.min' => 'El campo Factura debe llevar al menos 3 carácteres.',
+            /* 'factura.min' => 'El campo Factura debe llevar al menos 3 carácteres.', */
             'factura.unique' => 'La Factura ya existe.',
             'fecha.required' => 'El campo Fecha de compra no puede estar vacío.',
             'total.required' => 'Se deben agregar insumos para la compra.',
@@ -103,10 +111,12 @@ class CompraController extends Controller
         $a = Compra::findOrFail($id);
         $insumos = [];
         if($id != null){
-            $insumos = Insumo::select("insumos.*", "compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
+            $insumos = Insumo::select("insumos.*", "unidades.nombre as nombre_u","compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
             ->join("compra_detalles", "insumos.id", "=", "compra_detalles.insumo_id")
+            ->join("unidades","insumos.unidad_id", "=", "unidades.id")
             ->where("compra_detalles.compra_id", $id)
             ->get();
+
         }
 
         return view('compras.show', compact('insumos'));
@@ -118,16 +128,18 @@ class CompraController extends Controller
         $compras = Compra::find($id);
         $proveedores = Proveedore::all();
         $insumos = Insumo::all();
+        $unidades = Unidade::all();
         $a = Compra::findOrFail($id);
         $insumosa = [];
         
         if($id != null){
-            $insumosa = Insumo::select("insumos.*", "compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
+            $insumosa = Insumo::select("insumos.*", "unidades.nombre as nombre_u","compra_detalles.cantidad as cantidad_c","compra_detalles.precio as precio_c")
             ->join("compra_detalles", "insumos.id", "=", "compra_detalles.insumo_id")
+            ->join("unidades","insumos.unidad_id", "=", "unidades.id")
             ->where("compra_detalles.compra_id", $id)
             ->get();
         }
-        return view('compras.edit', compact('compras','proveedores','insumosa', 'insumos'));
+        return view('compras.edit', compact('compras','proveedores','insumosa', 'insumos', 'unidades'));
         
         
     }
@@ -138,7 +150,7 @@ class CompraController extends Controller
         $compras=Compra::findOrFail($id);
         $rules = [
             'proveedor_id' => 'required',
-            /* 'factura' => 'required|numeric|min:5|unique:compras,factura,'. request()->id, */
+            /* 'factura' => ['required','min:3','unique:compras,factura,'. request()->id], */
             'factura' => 'required',
             'fecha' => 'required',
             'estado' => 'required',
@@ -148,6 +160,7 @@ class CompraController extends Controller
             'proveedor_id.required' => 'El campo Proveedor no puede estar vacío.',
             'factura.required' => 'El campo Factura no puede estar vacío.',
             /* 'factura.unique' => 'La Factura ya existe.', */
+            /* 'factura.min' => 'El campo Factura debe llevar al menos 3 carácteres.', */
             'fecha.required' => 'El campo Fecha de compra no puede estar vacío.',
             'estado.required' => 'El campo Estado no puede estar vacío.',
             'total.required' => 'Se deben agregar insumos para la compra.',

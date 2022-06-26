@@ -33,15 +33,15 @@
 						<thead class="thead">
 							<tr> 
 								<td>#</td> 
-								<th>Tipo de Documento</th>
+								<th>Tipo de documento</th>
 								<th>Documento</th>
 								<th>Nombre</th>
 								<th>Email</th>
-								<th>Direccion</th>
+								<th>Dirección</th>
 								<th>Celular</th>
 								<th>Categoría</th>
 								<th>Estado</th>
-								<td>Acciones</td>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -67,9 +67,9 @@
 								@endforeach
 								<td>
 										@if($row->estado==1)
-										<button type="button" class="btn btn-sm btn-success">Activo</button>
+										<p style="color:green"><strong>Activo</strong></p>
 										@else
-										<button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                    	<p style="color:red"><strong>Inactivo</strong></p>
 										@endif
 								</td>
 								<td width="90">
@@ -79,7 +79,7 @@
 									</button>
 									<div class="dropdown-menu dropdown-menu-right">
 									<a data-toggle="modal" data-target="#updateModal" class="dropdown-item" wire:click="edit({{$row->id}})"><i class="fa fa-edit"></i> Editar </a>							 
-									<a class="dropdown-item" onclick="confirm('Confirm Delete Proveedore id {{$row->id}}? \nDeleted Proveedores cannot be recovered!')||event.stopImmediatePropagation()" wire:click="destroy({{$row->id}})"><i class="fa fa-trash"></i> Eliminar </a>   
+									
 									</div>
 								</div>
 								</td>

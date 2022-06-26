@@ -44,7 +44,6 @@
                             <thead class="thead">
                             <tr>
                                 <th>#</th>
-                                <th>No.</th>
                                 <th>Factura</th>
                                 <th>Fecha</th>
                                 <th>Proveedor</th>
@@ -57,7 +56,6 @@
                             @foreach ($compras as $compra)
                             <tr>
                                 <td>{{$loop->iteration}}</td>
-                                <td>{{ $compra->id}}</td>
                                 <td>{{ $compra->factura}}</td>
                                 <td>{{ $compra->fecha}}</td>
                                 @foreach ($proveedores as $row)
@@ -66,11 +64,11 @@
                                 @endif
                                 @endforeach
                                 <td>{{ $compra->total }}</td>
-                                <td class="td-actions text-right">
+                                <td >
                                     @if ($compra->estado==1)
-                                        <button type="button" class="btn btn-sm btn-success">Activo</button>
-                                    @else
-                                        <button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                        <p style="color:green"><strong>Activo</strong></p>
+									@else
+                                        <p style="color:red"><strong>Inactivo</strong></p>
                                     @endif
                                 </td>
                                 <td width="90">

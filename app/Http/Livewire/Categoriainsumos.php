@@ -40,9 +40,9 @@ class Categoriainsumos extends Component
 
     protected $messages = [
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
-		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
+		'nombre.min' => 'El campo Nombre debe llevar al menos 3 carácteres.',
         'nombre.unique' => 'La categoría ya existe.',
-        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+        'nombre.regex' => 'El campo Nombre debe contener solo letras.',
 	];
 
 
@@ -57,7 +57,7 @@ class Categoriainsumos extends Component
     {
         
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:categoriainsumos,nombre',
+		'nombre' => 'required|min:3|regex:/^[\pL\s\-]+$/u|unique:categoriainsumos,nombre',
         ]);
 
         Categoriainsumo::create([ 
@@ -85,7 +85,7 @@ class Categoriainsumos extends Component
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:categoriainsumos,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:3|regex:/^[\pL\s\-]+$/u|unique:categoriainsumos,nombre,'.$this->selected_id,
 		'estado' => 'required',
         ]);
                         

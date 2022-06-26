@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('nombre',30);
             $table->string('email',30);
             $table->string('direccion',30);
-            $table->integer('celular');
+            $table->string('celular');
             $table->bigInteger('categoria_id')->unsigned();
             $table->boolean('estado')->nullable()->default(1);
             $table->timestamps();

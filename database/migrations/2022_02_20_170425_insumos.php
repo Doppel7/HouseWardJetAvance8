@@ -17,10 +17,12 @@ return new class extends Migration
             $table->id();
             $table->string('nombre',30);
             $table->integer('cantidad')->default(0);
+            $table->bigInteger('unidad_id')->unsigned();
             $table->bigInteger('categoria_id')->unsigned();
             $table->boolean('estado')->nullable()->default(1);
             $table->timestamps();
             $table->foreign('categoria_id')->references('id')->on('categoriainsumos')->onDelete("cascade");
+            $table->foreign('unidad_id')->references('id')->on('unidades')->onDelete("cascade");
         });
     }
 

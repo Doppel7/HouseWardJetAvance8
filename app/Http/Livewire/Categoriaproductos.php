@@ -41,7 +41,7 @@ class Categoriaproductos extends Component
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
         'nombre.unique' => 'La categoría ya existe.',
-        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+        'nombre.regex' => 'El campo Nombre debe contener solo letras.',
     ];
     
     public function hydrate()
@@ -53,7 +53,7 @@ class Categoriaproductos extends Component
     public function store()
     {
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:categoriaproductos,nombre',
+		'nombre' => 'required|min:4|regex:/^[\pL\s\-]+$/u|unique:categoriaproductos,nombre',
         ]);
 
         Categoriaproducto::create([ 
@@ -63,7 +63,7 @@ class Categoriaproductos extends Component
         $this->resetValidation();
         $this->resetInput();
 		$this->emit('closeModal');
-		session()->flash('message', 'Categoría de Producto registrada correctamente.');
+		session()->flash('message', 'Categoría de producto registrada correctamente.');
     }
 
     public function edit($id)
@@ -80,7 +80,7 @@ class Categoriaproductos extends Component
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:categoriaproductos,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:4|regex:/^[\pL\s\-]+$/u|unique:categoriaproductos,nombre,'.$this->selected_id,
 		'estado' => 'required',
         ]);
 
@@ -94,7 +94,7 @@ class Categoriaproductos extends Component
             $this->resetInput();
             $this->updateMode = false;
             $this->emit('closeModal');
-			session()->flash('message', 'Categoría de Producto editada correctamente.');
+			session()->flash('message', 'Categoría de producto editada correctamente.');
         }
     }
 

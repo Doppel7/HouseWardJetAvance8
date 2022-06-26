@@ -12,7 +12,7 @@
                         <div style="display: flex; justify-content: space-between; align-items: center;">
                         <div class="float-left">
 							<h4><i class="fab fa-laravel text-info"></i>
-							Fichas Técnicas</h4>
+							Fichas técnicas</h4>
 					    </div>
                             <div wire:poll.60s>
 							<code><h5>{{ now()->format('H:i:s') }} </h5></code>
@@ -29,8 +29,10 @@
                                                 <div class="card-body">
                                                         <div class="form-group">
                                                         <label for="nombre"></label>
-                                                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" name="nombre" placeholder="Ingrese el nombre de la ficha" value="{{old('nombre')}}" autofocus>
+                                                        <input type="text" class="form-control @error('nombre') is-invalid @enderror" name="nombre" placeholder="Ingrese el nombre de la ficha *" value="{{old('nombre')}}" autofocus>
                                                         @error('nombre') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                                        @error('insumo_id') <span class="invalid-feedback">{{ $message }}</span> @enderror
+                                                        
                                                         </div>
                                                 </div>
                                             </div>
@@ -81,13 +83,17 @@
                             <form>
                                 <div class="form-group">
                                     <label for="insumo"></label>
-                                    <select class="form-control " name="insumo" id="insumo" required>
+                                    <select class="form-control " name="insumo" id="insumo" onchange="colocar_unidad()" required>
                                         <option value="">Seleccione el insumo</option>
                                         @foreach ( $insumos as $row )
-                                        @if ($row->estado==0)
+                                        @if($row->estado==0)
                                         @continue
                                         @endif
-                                        <option value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @foreach($unidades as $unidade)
+                                        @if ($row->unidad_id==$unidade->id)
+                                        <option unidad_id="{{$unidade->nombre}}" value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @endif
+                                        @endforeach
                                         @endforeach
                                     </select>
                                         @if ($errors->has('insumo'))
@@ -100,7 +106,11 @@
                                         @if ($errors->has('cantidad'))
                                         <span class="error text-danger" for="input-cantidad">{{ $errors->first('cantidad') }}</span>
                                         @endif
-                                </div>                                
+                                </div>
+                                <div class="form-group">
+                                        <label for="unidad_id"></label>
+                                        <input type="text" class="form-control" id="unidad_id" name="unidad_id" placeholder="Unidad" readonly required>
+                                </div>                              
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Cerrar</button>
                                     <button type="submit" onclick="agregar_insumo()" data-dismiss="modal" class="btn btn-primary close-modal">Agregar Insumo</button>
@@ -111,12 +121,18 @@
                         </div>
 <script>
             
+
+            function colocar_unidad(){
+            let unidad_id= $("#insumo option:selected").attr("unidad_id");
+            $("#unidad_id").val(unidad_id);
+            }
             
 
 
             function agregar_insumo(){
                 let insumo_id = $("#insumo option:selected").val();
                 let insumo_text = $("#insumo option:selected").text();
+                let unidad_id = $("#unidad_id").val();
                 let cantidad = $("#cantidad").val();
 
                 if(insumo_id>0 &&cantidad > 0 ){
@@ -129,7 +145,7 @@
                                 ${insumo_text}
 
                             </td>
-                            <td>${cantidad}</td>
+                            <td>${cantidad} ${unidad_id}</td>
                             <td>
                                 <button type="button" class="btn btn-danger" onclick="eliminar_insumo(${insumo_id})" >X</button>
                             </td>
@@ -141,6 +157,7 @@
                     alert("Se debe ingresar una cantidad valida");
                 }
                 $("#insumo").val('');
+                $("#unidad_id").val('');
                 $("#cantidad").val('');
             }
 

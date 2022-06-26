@@ -263,7 +263,7 @@ return [
             'submenu' => [
                 [
                     'text' => 'Categoría de Insumos',
-                    'icon'    => 'fas fa-candy-cane',
+                    'icon'    => 'fas fa-fw fa-tags',
                     'url'  => 'categoriainsumos',
                 ],
                 [
@@ -273,12 +273,12 @@ return [
                 ],
                 [
                     'text' => 'Categoría de proveedores',
-                    'icon'    => 'fas fa-horse-head',
+                    'icon'    => 'fas fa-fw fa-tags',
                     'url'  => 'categoriaproveedores',
                 ],
                 [
                     'text' => 'Proveedores',
-                    'icon'    => 'fas fa-car-side',
+                    'icon'    => 'fas fa-people-carry',
                     'url'  => 'proveedores',
                 ],
                 [
@@ -293,13 +293,8 @@ return [
             'icon'    => 'fas fa-fw fa-shopping-bag',
             'submenu' => [
                 [
-                    'text' => 'Empleados',
-                    'icon'    => 'fas fa-fw fa-person-booth',
-                    'url'  => 'empleados',
-                ],
-                [
                     'text' => 'Categoría de productos',
-                    'icon'    => 'fas fa-fw fa-redo',
+                    'icon'    => 'fas fa-fw fa-tags',
                     'url'  => 'categoriaproductos',
                 ],
                 [
@@ -316,6 +311,41 @@ return [
                     'text' => 'Pedidos',
                     'icon'    => 'fas fa-fw fa-shipping-fast',
                     'url'  => 'pedidos',
+                ],
+            ],
+        ],
+        [
+            'text' => 'Empleados',
+            'icon'    => 'fas fa-fw fa-person-booth',
+            'url'  => 'empleados',
+        ],
+        [
+            'text'    => 'Ayuda en linea',
+            'icon'    => 'fas fa-fw fa-headphones-alt',
+            'submenu' => [
+                [
+                    'text' => 'Usuarios',
+                    'icon' => 'fas fa-fw fa-user',
+                    'url'  => 'https://www.youtube.com/watch?v=QttcaydG5ww',
+                    'target' => '_blank',
+                ],
+                [
+                    'text'    => 'Compras',
+                    'icon'    => 'fas fa-shopping-cart',
+                    'url'  => 'https://www.youtube.com/watch?v=9BLVDUW5rQ4',
+                    'target' => '_blank',
+                ],
+                [
+                    'text'    => 'Productos',
+                    'icon'    => 'fas fa-fw fa-shopping-bag',
+                    'url'  => 'https://www.youtube.com/watch?v=5Spiyz2kVls',
+                    'target' => '_blank',
+                ],
+                [
+                    'text'    => 'Acceso',
+                    'icon'    => 'fas fa-fw fa-cogs',
+                    'url'  => 'https://www.youtube.com/watch?v=ZB-q1FyCRA8',
+                    'target' => '_blank',
                 ],
             ],
         ],

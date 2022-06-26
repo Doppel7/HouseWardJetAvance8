@@ -10,7 +10,7 @@
 					<div style="display: flex; justify-content: space-between; align-items: center;">
 						<div class="float-left">
 							<h4><i class="fab fa-laravel text-info"></i>
-							Categoría de Insumos</h4>
+							Categoría de insumos</h4>
 						</div>
 						<div wire:poll.60s>
 							<code><h5>{{ now()->format('H:i:s') }} </h5></code>
@@ -35,7 +35,7 @@
 								<td>#</td> 
 								<th>Nombre</th>
 								<th>Estado</th>
-								<td>Acciones</td>
+								<th>Acciones</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -45,9 +45,9 @@
 								<td>{{ $row->nombre }}</td>
 								<td>
 									@if($row->estado==1)
-									<button type="button" class="btn btn-sm btn-success">Activo</button>
+										<p style="color:green"><strong>Activo</strong></p>
 									@else
-									<button type="button" class="btn btn-sm btn-danger">Inactivo</button>
+                                    	<p style="color:red"><strong>Inactivo</strong></p>
 									@endif
 								</td>
 								<td width="90">
@@ -56,8 +56,7 @@
 									Acciones
 									</button>
 									<div class="dropdown-menu dropdown-menu-right">
-									<a data-toggle="modal" data-target="#updateModal" class="dropdown-item" wire:click="edit({{$row->id}})"><i class="fa fa-edit"></i> Editar </a>							 
-									<a class="dropdown-item" onclick="confirm('Confirm Delete Categoriainsumo id {{$row->id}}? \nDeleted Categoriainsumos cannot be recovered!')||event.stopImmediatePropagation()" wire:click="destroy({{$row->id}})"><i class="fa fa-trash"></i> Eliminar </a>   
+									<a data-toggle="modal" data-target="#updateModal" class="dropdown-item" wire:click="edit({{$row->id}})"><i class="fa fa-edit"></i> Editar </a>							   
 									</div>
 								</div>
 								</td>

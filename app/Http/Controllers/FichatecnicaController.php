@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Fichatecnica;
 use App\Models\Ficha_detalle;
 use App\Models\Insumo;
+use App\Models\Unidade;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use PDF;
@@ -22,14 +23,16 @@ class FichatecnicaController extends Controller
     public function pdf(Request $request, $id){
         $fichatecnicas = DB::select('SELECT nombre from fichatecnicas  where id=?', [$id]);
         $a = Fichatecnica::findOrFail($id);
+        $unidades = Unidade::all();
         $insumos = [];
         if($a!= null){
-            $insumos = Insumo::select("insumos.*", "ficha_detalles.cantidad as cantidad_c")
+            $insumos = Insumo::select("insumos.*", "unidades.nombre as nombre_u", "ficha_detalles.cantidad as cantidad_c")
             ->join("ficha_detalles", "insumos.id", "=", "ficha_detalles.insumo_id")
+            ->join("unidades","insumos.unidad_id", "=", "unidades.id")
             ->where("ficha_detalles.ficha_id", $id)
             ->get();
         }
-        $pdf = PDF::loadView('fichatecnicas.pdf',['fichatecnicas'=>$fichatecnicas, 'insumos'=>$insumos]);
+        $pdf = PDF::loadView('fichatecnicas.pdf',['fichatecnicas'=>$fichatecnicas, 'insumos'=>$insumos, 'unidades'=>$unidades]);
         return $pdf->download('___fichatecnicas.pdf');
     }
 
@@ -37,20 +40,25 @@ class FichatecnicaController extends Controller
      {
          $fichatecnica = new Fichatecnica;
          $fichatecnicas = Fichatecnica::all();
+         $unidades = Unidade::all();
          $insumos = Insumo::all();
-         return view('fichatecnicas.create', compact('fichatecnicas','insumos'));
+         return view('fichatecnicas.create', compact('fichatecnicas','insumos','unidades'));
 
      }
 
     public function store(Request $request)
     {
         $rules = [
-            'nombre' => 'required|min:5|alpha',
+            'insumo_id'=>'required',
+            'nombre' => 'required|min:5|regex:/^[\pL\s\-]+$/u',
+            
         ];
         $messages = [
+            'insumo_id.required' => 'Se deben agregar insumos para la ficha técnica.',
             'nombre.required' => 'El campo Nombre de la ficha técnica no puede estar vacío.',
             'nombre.min' => 'El campo Nombre de la ficha técnica debe llevar al menos 5 carácteres.',
-            'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+            'nombre.regex' => 'El campo Nombre debe contener solo letras.',
+            
         ];
         $this->validate($request, $rules, $messages);
         $input = $request->all();
@@ -73,8 +81,9 @@ class FichatecnicaController extends Controller
         $a = Fichatecnica::findOrFail($id);
         $insumos = [];
         if($id != null){
-            $insumos = Insumo::select("insumos.*", "ficha_detalles.cantidad as cantidad_c")
+            $insumos = Insumo::select("insumos.*", "unidades.nombre as nombre_u", "ficha_detalles.cantidad as cantidad_c")
             ->join("ficha_detalles", "insumos.id", "=", "ficha_detalles.insumo_id")
+            ->join("unidades","insumos.unidad_id", "=", "unidades.id")
             ->where("ficha_detalles.ficha_id", $id)
             ->get();
         }
@@ -86,15 +95,17 @@ class FichatecnicaController extends Controller
     {
         $fichatecnica = Fichatecnica::find($id);
         $insumos = Insumo::all();
+        $unidades = Unidade::all();
         $insumosa = [];
         
         if($id != null){
-            $insumosa = Insumo::select("insumos.*", "ficha_detalles.cantidad as cantidad_c")
+            $insumosa = Insumo::select("insumos.*", "unidades.nombre as nombre_u", "ficha_detalles.cantidad as cantidad_c")
             ->join("ficha_detalles", "insumos.id", "=", "ficha_detalles.insumo_id")
+            ->join("unidades","insumos.unidad_id", "=", "unidades.id")
             ->where("ficha_detalles.ficha_id", $id)
             ->get();
         }
-        return view('fichatecnicas.edit', compact('fichatecnica','insumos','insumosa'));
+        return view('fichatecnicas.edit', compact('fichatecnica','insumos','insumosa','unidades'));
         
         
     }
@@ -102,11 +113,14 @@ class FichatecnicaController extends Controller
     public function update(Request $request, $id)
     {       
         $rules = [
-            'nombre' => 'required|min:5',
+            'insumo_id'=>'required',
+            'nombre' => 'required|min:5|regex:/^[\pL\s\-]+$/u',
         ];
         $messages = [
+            'insumo_id.required' => 'Se deben agregar insumos para la ficha técnica.',
             'nombre.required' => 'El campo Nombre de la ficha técnica no puede estar vacío.',
             'nombre.min' => 'El campo Nombre de la ficha técnica debe llevar al menos 5 carácteres.',
+            'nombre.regex:/^[\pL\s\-]+$/u' => 'El campo Nombre debe contener solo letras.',
         ];
         $this->validate($request, $rules, $messages);
         $fichatecnica=Fichatecnica::findOrFail($id);

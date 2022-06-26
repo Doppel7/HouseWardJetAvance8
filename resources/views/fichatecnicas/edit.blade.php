@@ -74,7 +74,7 @@
                                         @foreach ($insumosa as $row)
                                         <tr id="tr-{{$row->id}}">
                                             <td>{{ $row->nombre}}</td>
-                                            <td>{{ $row->cantidad_c}}</td>
+                                            <td>{{ $row->cantidad_c}} {{ $row->nombre_u}} </td>
                                             <td><button type="button" class="btn btn-danger"
                                                     onclick="eliminar_insumo({{$row->id}}, {{$row->cantidad_c}} )">X</button>
                                             </td>
@@ -107,13 +107,17 @@
                             <form>
                                 <div class="form-group">
                                     <label for="insumo"></label>
-                                    <select class="form-control " name="insumo" id="insumo" required>
+                                    <select class="form-control " name="insumo" id="insumo" onchange="colocar_unidad()" required>
                                         <option value="">Seleccione el insumo</option>
                                         @foreach ( $insumos as $row )
-                                        @if ($row->estado==0)
+                                        @if($row->estado==0)
                                         @continue
                                         @endif
-                                        <option value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @foreach($unidades as $unidade)
+                                        @if ($row->unidad_id==$unidade->id)
+                                        <option unidad_id="{{$unidade->nombre}}" value="{{$row->id}}">{{$row->nombre}}</option>
+                                        @endif
+                                        @endforeach
                                         @endforeach
                                     </select>
                                         @if ($errors->has('insumo'))
@@ -126,6 +130,10 @@
                                         @if ($errors->has('cantidad'))
                                         <span class="error text-danger" for="input-cantidad">{{ $errors->first('cantidad') }}</span>
                                         @endif
+                                </div> 
+                                <div class="form-group">
+                                        <label for="unidad_id"></label>
+                                        <input type="text" class="form-control" id="unidad_id" name="unidad_id" placeholder="Unidad" readonly required>
                                 </div>                                
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary close-btn" data-dismiss="modal">Cerrar</button>
@@ -137,12 +145,16 @@
                         </div>
 <script>
             
-            
+            function colocar_unidad(){
+            let unidad_id= $("#insumo option:selected").attr("unidad_id");
+            $("#unidad_id").val(unidad_id);
+            }
 
 
             function agregar_insumo(){
                 let insumo_id = $("#insumo option:selected").val();
                 let insumo_text = $("#insumo option:selected").text();
+                let unidad_id = $("#unidad_id").val();
                 let cantidad = $("#cantidad").val();
 
                 if(insumo_id>0 &&cantidad > 0 ){
@@ -155,7 +167,7 @@
                                 ${insumo_text}
 
                             </td>
-                            <td>${cantidad}</td>
+                            <td>${cantidad} ${unidad_id}</td>
                             <td>
                                 <button type="button" class="btn btn-danger" onclick="eliminar_insumo(${insumo_id})" >X</button>
                             </td>
@@ -167,6 +179,7 @@
                     alert("Se debe ingresar una cantidad valida");
                 }
                 $("#insumo").val('');
+                $("#unidad_id").val('');
                 $("#cantidad").val('');
             }
             let insumito = [];

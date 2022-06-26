@@ -30,7 +30,7 @@
                                                 <div class="form-group">
                                     <label for="empleado_id"></label>
                                     <select class="form-control @error('empleado_id') is-invalid @enderror" name="empleado_id" id="empleado_id">
-                                        <option value="">Seleccione el empleado</option>
+                                        <option value="">--> Seleccione el empleado * <--</option>
                                         @foreach ( $empleados as $row )
                                         @if ($row->estado==0)
                                         @continue
@@ -38,17 +38,14 @@
                                         <option value="{{$row->id}}">{{$row->nombre}}</option>
                                         @endforeach
                                     </select>
-                                    <!-- @if ($errors->has('empleado_id'))
-                                    <span class="error text-danger" for="input-empleado_id">{{ $errors->first('empleado_id') }}</span>
-                                    @endif -->
                                 </div>
                                 <div class="form-group">
-                                                <label for="fecha">Fecha del Pedido</label>
+                                                <label for="fecha">Fecha del pedido *</label>
                                                 <input type="date" class="form-control @error('fecha') is-invalid @enderror" name="fecha" placeholder="Ingrese la fecha" value="{{old('fecha')}}" autofocus max="<?=date('Y-m-d');?>">
                                                 @error('fecha') <span class="invalid-feedback">{{ $message }}</span> @enderror
                                                 </div>
                                                 <div class="form-group">
-                                                <label for="total">Total</label>
+                                                <label for="total">Total *</label>
                                                 <input type="number" class="form-control @error('total') is-invalid @enderror" id="total" name="total" readonly>
                                                 @error('total') <span class="invalid-feedback">{{ $message }}</span> @enderror</div>
                                                 </div>

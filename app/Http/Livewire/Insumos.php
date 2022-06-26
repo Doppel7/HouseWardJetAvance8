@@ -5,6 +5,7 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Categoriainsumo;
+use App\Models\Unidade;
 use App\Models\Insumo;
 
 class Insumos extends Component
@@ -12,7 +13,7 @@ class Insumos extends Component
     use WithPagination;
 
 	protected $paginationTheme = 'bootstrap';
-    public $selected_id, $keyWord, $nombre, $cantidad, $categoria_id, $estado;
+    public $selected_id, $keyWord, $nombre, $cantidad, $unidad_id, $categoria_id,  $estado;
     public $updateMode = false;
     public $selectedCategoria=null;
 
@@ -20,13 +21,14 @@ class Insumos extends Component
     {
 
 
-
 		$keyWord = '%'.$this->keyWord .'%';
         return view('livewire.insumos.view', [
             'categoriainsumos'=>Categoriainsumo::all(),
+            'unidades'=>Unidade::all(),
             'insumos' => Insumo::latest()
 						->orWhere('nombre', 'LIKE', $keyWord)
-						->orWhere('cantidad', 'LIKE', $keyWord)
+                        ->orWhere('cantidad', 'LIKE', $keyWord)
+                        ->orWhere('unidad_id', 'LIKE', $keyWord)
 						->orWhere('categoria_id', 'LIKE', $keyWord)
 						->orWhere('estado', 'LIKE', $keyWord)
 						->paginate(10),
@@ -42,7 +44,8 @@ class Insumos extends Component
     private function resetInput()
     {		
 		$this->nombre = null;
-		$this->cantidad = null;
+        $this->cantidad = null;
+        $this->unidad_id = null;
 		$this->categoria_id = null;
 		$this->estado = null;
     }
@@ -51,9 +54,10 @@ class Insumos extends Component
 		'nombre.required' => 'El campo Nombre no puede estar vacío.',
 		'nombre.min' => 'El campo Nombre debe llevar al menos 4 carácteres.',
         'nombre.unique' => 'La insumo ya existe.',
-        'nombre.alpha' => 'El campo Nombre debe contener solo letras.',
+        'nombre.regex' => 'El campo Nombre debe contener solo letras.',
         'cantidad.required' => 'El campo Cantidad no puede estar vacío.',
         'cantidad.numeric' => 'El campo Cantidad debe llevar solo carácteres numéricos.',
+        'unidad_id.required' => 'El campo Unidad no puede estar vacío.',
 	];
 
 
@@ -65,18 +69,17 @@ class Insumos extends Component
 
     public function store()
     {
-        
-
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:insumos,nombre',
-		'categoria_id' => 'required',
+		'nombre' => 'required|min:4|regex:/^[\pL\s\-]+$/u|unique:insumos,nombre',
+        'categoria_id' => 'required',
+        'unidad_id' => 'required',
         ]);
 
         Insumo::create([ 
-			'nombre' => $this-> nombre,
+            'nombre' => $this-> nombre,
+            'unidad_id' => $this-> unidad_id,
 			'categoria_id' => $this-> categoria_id,
-
-            
+			
         ]);
 
         $this->resetValidation();
@@ -93,6 +96,7 @@ class Insumos extends Component
 		$this->nombre = $record-> nombre;
 		$this->cantidad = $record-> cantidad;
 		$this->categoria_id = $record-> categoria_id;
+		$this->unidad_id = $record-> unidad_id;
 		$this->estado = $record-> estado;
 		
         $this->updateMode = true;
@@ -101,9 +105,10 @@ class Insumos extends Component
     public function update()
     {
         $this->validate([
-		'nombre' => 'required|min:4|alpha|unique:insumos,nombre,'.$this->selected_id,
+		'nombre' => 'required|min:4|regex:/^[\pL\s\-]+$/u|unique:insumos,nombre,'.$this->selected_id,
 		'cantidad' => 'required|numeric',
 		'categoria_id' => 'required',
+        'unidad_id' => 'required',
 		'estado' => 'required',
         ]);
 
@@ -113,6 +118,7 @@ class Insumos extends Component
 			'nombre' => $this-> nombre,
 			'cantidad' => $this-> cantidad,
 			'categoria_id' => $this-> categoria_id,
+			'unidad_id' => $this-> unidad_id,
 			'estado' => $this-> estado
             ]);
 

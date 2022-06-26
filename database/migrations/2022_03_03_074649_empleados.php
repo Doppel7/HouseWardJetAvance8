@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('direccion',30);
             $table->bigInteger('municipio')->unsigned();
             $table->date('fechadenacimiento');
-            $table->integer('telefono');
-            $table->integer('celular');
+            $table->string('telefono');
+            $table->string('celular');
             $table->boolean('estado')->default(1);
             $table->timestamps();
             $table->foreign('tipodoc_id')->references('id')->on('tipodocumentos')->onDelete("cascade");
